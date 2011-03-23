@@ -15,8 +15,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "haml-scais"
   gem.homepage = "http://github.com/aokiji/haml-scais"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{Add scais support for haml}
+  gem.description = %Q{Add helpers to haml to quickly build topologies, trees and simulation files}
   gem.email = "ndls05@gmail.com"
   gem.authors = ["nico"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,

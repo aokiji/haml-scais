@@ -1,0 +1,55 @@
+%block{ 'Code' => options[:code], 'Name' => options[:name], 'ModuleType' => options[:module_type], 'FlagActive' => options[:active], 'DebuggingLevel' => options[:debugging_level]}
+  %index= options[:index]
+  - if options[:modes].is_a?(Array)
+    %modes= options[:modes].join(',')
+  - else
+    %modes= options[:modes]
+  - babiecamod = options[:babieca_module]
+  - if babiecamod
+    %BabiecaModule
+      %topologyname babiecamod[:topology_name]
+      %simulationparameters 
+        %timedelta= babiecamod[:simulation_parameters][:delta]
+        %frequencysaveblock= babiecamod[:simulation_parameters][:frequency]
+  - options[:outputs].each do |out|
+    - output = out.is_a?(Hash) ? out.values[0] : {}
+    - code = out.is_a?(Hash) ? out.keys[0] : out
+    %output{ 'Code' => code, 'FlagSave' => output[:save] == true ? 1 : 0 }
+      - if output[:alias]
+        %alias= output[:alias]
+      - if output[:initialguessvalue]
+        %initialguessvalue= output[:initialguessvalue]
+      - if output[:mapsection]
+        %masterbranch= output[:mapsection][:masterbranch]
+        %slavebranch= output[:mapsection][:masterbranch]
+  - options[:inputs].each do |inp|
+    - input = inp.is_a?(Hash) ? inp.values[0] : {}
+    - code = inp.is_a?(Hash) ? inp.keys[0] : inp
+    %input{ 'Code' => code }
+      %link{ 'FlagRecursive' => (input[:recursive] == true ? 1 : 0) }
+        %outputbranch= input[:from]
+        - if input[:recursive] == true
+          %usedaccelerator= input[:accelerator] 
+        - if input[:modes] && input[:modes].is_a?(Array)
+          %modes= input[:modes].join(',')
+        - elsif input[:modes]
+          %modes= input[:modes]
+      - if input[:alias]
+        %alias= input[:alias]
+      - if input[:mapsection]
+        %mapsection
+          %masterbranch= input[:mapsection][:masterbranch]
+          %initialguessvalue= input[:mapsection][:initialguessvalue]
+      - if input[:stimulus]
+        %actionstimulus= input[:stimulus]
+  - options[:constants].each do |code, value|
+    %constant{ 'Code' => code }
+      - if value.is_a?(String)
+        - if value.match(/<|>/)
+          %stringvalue= Haml::Filters::Cdata.render(value)
+        - else
+          %stringvalue= value
+      - elsif value.is_a?(Array)
+        %value= value.join(',')
+      - else
+        %value= value
