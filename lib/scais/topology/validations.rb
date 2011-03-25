@@ -1,5 +1,5 @@
-require 'scais/modules/validations/presence_validator'
-require 'scais/modules/validations/many_validator'
+require 'scais/topology/validations/presence_validator'
+require 'scais/topology/validations/many_validator'
 
 module Validations
   module InstanceMethods

@@ -1,7 +1,0 @@
-require 'scais/renderer'
-require 'scais/modules/validations'
-require 'scais/modules/block'
-require 'scais/modules/fint'
-require 'scais/modules/funin'
-require 'scais/modules/logate'
-require 'scais/modules/logate_handler'

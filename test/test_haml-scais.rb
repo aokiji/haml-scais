@@ -2,7 +2,7 @@ require File.expand_path('../helper',__FILE__)
 
 class TestHamlScais < Test::Unit::TestCase
   def test_block
-    block = Block.new :code => 'H1'
+    block = Block::Base.new :code => 'H1'
     modes = ['A', 'B']
     block.modes = modes    
     assert block.modes.to_s == modes.join(','),  'Modes Array.to_s should have been extended'
@@ -20,7 +20,7 @@ class TestHamlScais < Test::Unit::TestCase
   end
   
   def test_constants
-    block = Block.new :code => 'Test'
+    block = Block::Base.new :code => 'Test'
     array = [0, 1, 2]
     block.constants = {'FORMULA' => 'A < B', 'ARRAY' => array, 'STRING' => 'HOLA'}
     
@@ -52,7 +52,7 @@ class TestHamlScais < Test::Unit::TestCase
   def test_funin
     funin = Funin.new('B8', :name =>'FUNIN EXP-2', :active => true).debug(:fatal).index(8).modes('B')
     funin.outputs<< funin.output.save(true).alias('ANALYT2')
-    funin.inputs<< funin.input.alias('I0').from(Block.new('B1').output(0)).modes('B')
+    funin.inputs<< funin.input.alias('I0').from(Block::Base.new('B1').output(0)).modes('B')
     funin.formula = "I0+sqrt(2/5)*exp((TAU-TIME)/2)*sin(0.5*(sqrt(5)*(TIME-TAU)*PI)"
     puts funin.to_xml
   end
@@ -60,9 +60,9 @@ class TestHamlScais < Test::Unit::TestCase
   def test_logate
     logate = Logate.new('B16').name('MULTIPLEXOR').active(true).debug(:info).index(16).modes('ALL')
     logate.outputs<< logate.output.alias('MULTIPLEXACION').save(true)
-    logate.inputs<< logate.input(0).alias('I0').from(Block.new('B1').output('TRIGGER')).modes('ALL')
-    logate.high = logate.input.from(Block.new('B14').output(0)).modes('ALL').alias('IN_HIGH')
-    logate.low = logate.input.from(Block.new('B15').output(0)).modes('ALL').alias('IN_LOW')
+    logate.inputs<< logate.input(0).alias('I0').from(Block::Base.new('B1').output('TRIGGER')).modes('ALL')
+    logate.high = logate.input.from(Block::Base.new('B14').output(0)).modes('ALL').alias('IN_HIGH')
+    logate.low = logate.input.from(Block::Base.new('B15').output(0)).modes('ALL').alias('IN_LOW')
     logate.condition = "I0>0"
     logate.initial_output(0, :alias => 'INITSTATE')
     puts logate.to_xml
@@ -71,7 +71,7 @@ class TestHamlScais < Test::Unit::TestCase
   def test_logate_handler
     lh = LogateHandler.new('B5').name('LogateModeChange').debug(:info).active(true).index(5).modes('ALL')
     lh.outputs<< lh.output.alias('LOGAT1')
-    lh.inputs<< lh.input.from(Block.new('B4').output(0)).alias('I0').modes('ALL')
+    lh.inputs<< lh.input.from(Block::Base.new('B4').output(0)).alias('I0').modes('ALL')
     lh.previous_output :alias => 'PREVOUT'
     lh.initial_output(0, :alias => 'INITOUT')
     lh.precision = 0.005
