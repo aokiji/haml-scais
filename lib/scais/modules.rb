@@ -1,9 +1,20 @@
-require 'scais/extensions'
+require 'scais/renderer'
 module Scais
   module Modules
-    include Scais::Extensions
+    include Renderer
     attr_accessor :nblocks
     
+    #
+    # LOGATE HANDLER BLOCK GENERATOR
+    #
+    def logate_handler code, options
+      raise Exception.new('too many outputs') if options[:outputs] and options[:outputs].keys.size > 1
+      
+      raise Exception.new('missing condition') if options[:condition].nil?
+      raise Exception.new('missing initial output') if options[:initial_output].nil?
+      options = default_block_options(:outputs => {'O0' => false}, :name => code).merge(options).merge(:module_type => 'FUNIN', :initial_variables =>{'INITIALOUTPUT' => options[:initial_output]}, :internal_variables =>{'PREVIOUSOUTPUT' => true}, :constants => {'FORMULA' => options[:condition]})
+      block code, options
+    end
     #
     # LOGATE BLOCK GENERATOR
     #
@@ -69,3 +80,7 @@ module Scais
     end
   end
 end
+
+require 'scais/modules/validations'
+require 'scais/modules/block'
+require 'scais/modules/fint'

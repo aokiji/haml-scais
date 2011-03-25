@@ -1,0 +1,59 @@
+%block{ 'Code' => code, 'Name' => name, 'ModuleType' => self.module, 'FlagActive' => active_value, 'DebuggingLevel' => debug}
+  %index= index
+  - if modes?
+    %modes= modes
+  -#
+    - babiecamod = options[:babieca_module]
+    - if babiecamod
+      %BabiecaModule
+        %topologyname babiecamod[:topology_name]
+        %simulationparameters 
+          %timedelta= babiecamod[:simulation_parameters][:delta]
+          %frequencysaveblock= babiecamod[:simulation_parameters][:frequency]
+  - outputs.each do |output|
+    %output{ 'Code' => output.code, 'FlagSave' => output.save_value }
+      - if output.alias?
+        %alias= output.alias
+      - if output.initial_value?
+        %initialguessvalue= output.initial_value
+      -#
+        - if output[:mapsection]
+          %masterbranch= output[:mapsection][:masterbranch]
+          %slavebranch= output[:mapsection][:masterbranch]
+  - inputs.each do |input|
+    - input = {:from => input} if input.is_a?(String)
+    %input{ 'Code' => input.code }
+      %link{ 'FlagRecursive' => input.recursive_value }
+        %outputbranch= input.from
+        - if input.recursive?
+          %usedaccelerator= input.accelerator
+        - if input.modes?
+          %modes= input.modes
+      - if input.alias?
+        %alias= input.alias
+      -#
+        - if input[:mapsection]
+          %mapsection
+            %masterbranch= input[:mapsection][:masterbranch]
+            %initialguessvalue= input[:mapsection][:initialguessvalue]
+        - if input[:stimulus]
+          %actionstimulus= input[:stimulus]
+  - constants.each do |const|
+    %constant{ 'Code' => const.code }
+      - if const.value.string?
+        %stringvalue= const.value
+      - else
+        %value= const.value
+  - initial_variables.each do |ivar|
+    %initialvar{ 'Code' => ivar.code }
+      - if ivar.initial_value
+        %initialvalue= ivar.initial_value
+      - if ivar.alias
+        %alias= ivar.alias
+  - internal_variables.each do |ivar|
+    %internalvar{ 'Code' => ivar.code }
+      - if ivar.initial_value
+        %initialvalue= ivar.initial_value
+      - if ivar.alias
+        %alias= ivar.alias
+    
