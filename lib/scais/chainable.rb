@@ -9,9 +9,10 @@ module Chainable
   
   module ClassMethods
     # automatic define chainable reader methods
+    # is your responsibility to define the setter method attribute=
     def attr_chainable_reader *methods
       methods.each do |m|
-        self.class_eval "def #{m.to_s} vals=nil, &block;@chain_block=block;vals.nil? ? @#{m.to_s} : (@#{m.to_s}=vals) && self; end"
+        self.class_eval "def #{m.to_s} vals=nil, &block;@chain_block=block;vals.nil? ? @#{m.to_s} : (self.#{m.to_s}=vals) && self; end"
       end
     end
     

@@ -1,11 +1,18 @@
 class Output
   include Chainable
+  include Attributed
+  
   attr_chainable :code, :save, :alias, :initial_value, :block, :n
   
-  def initialize block, n = nil
+  def initialize block, n = nil, attributes={}
     @block = block
-    @n = n
+    if n.is_a?(Integer) 
+      @n = n
+    elsif !n.nil?
+      attributes.merge! :code => n
+    end
     @save = false
+    self.attributes = attributes
   end
   # check is outputs is going to be saved to database
   def save?

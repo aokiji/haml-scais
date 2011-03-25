@@ -7,7 +7,8 @@ class OutputArray < Array
   
   def << obj
     obj = parse(obj) unless obj.is_a?(Output)
-    obj.n = self.size+1
+    obj.n = self.size
+    obj.code("O#{obj.n}") if obj.code.nil? # default code if none given
     super obj
   end
   

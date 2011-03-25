@@ -1,4 +1,4 @@
-%block{ 'Code' => code, 'Name' => name, 'ModuleType' => self.module, 'FlagActive' => active_value, 'DebuggingLevel' => debug}
+%block{ 'Code' => code, 'Name' => name, 'ModuleType' => self.module, 'FlagActive' => active_value, 'DebuggingLevel' => debug_level}
   %index= index
   - if modes?
     %modes= modes
@@ -23,14 +23,14 @@
   - inputs.each do |input|
     - input = {:from => input} if input.is_a?(String)
     %input{ 'Code' => input.code }
+      - if input.alias?
+        %alias= input.alias
       %link{ 'FlagRecursive' => input.recursive_value }
         %outputbranch= input.from
         - if input.recursive?
           %usedaccelerator= input.accelerator
         - if input.modes?
           %modes= input.modes
-      - if input.alias?
-        %alias= input.alias
       -#
         - if input[:mapsection]
           %mapsection
@@ -46,10 +46,10 @@
         %value= const.value
   - initial_variables.each do |ivar|
     %initialvar{ 'Code' => ivar.code }
-      - if ivar.initial_value
-        %initialvalue= ivar.initial_value
       - if ivar.alias
         %alias= ivar.alias
+      - unless ivar.value.nil?
+        %value= ivar.value
   - internal_variables.each do |ivar|
     %internalvar{ 'Code' => ivar.code }
       - if ivar.initial_value

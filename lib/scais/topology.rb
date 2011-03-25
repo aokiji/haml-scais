@@ -30,7 +30,7 @@ class Topology
   #defines schema location
   def schema
     if Scais.root
-      File.join(Scais.root, 'BABIECA', 'Schema', 'Topology.xsd')
+      'file://'+File.join(Scais.root, 'BABIECA', 'Schema', 'Topology.xsd')
     else
       nil
     end 
@@ -40,6 +40,10 @@ class Topology
     topo = self
     blck = topo_block
     render(File.expand_path("../modules/haml/topology.haml", __FILE__), self, {}, &block = Proc.new {blck.call(topo) if blck})
+  end
+  
+  def to_s
+    to_xml
   end
   
   private

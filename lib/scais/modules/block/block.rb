@@ -4,14 +4,17 @@ class Block
   include Attributed
   include Renderer
   
-  attr_accessor :module, :code, :name, :active, :outputs, :inputs, :initial_variables, :internal_variables, :debug
-  attr_reader :modes, :constants
-  attr_chainable :index # make index chainable
+  attr_accessor :module, :code, :outputs, :inputs, :initial_variables, :internal_variables
+  attr_reader :constants
+  attr_chainable_reader :modes
+  attr_chainable :index, :name, :active, :module, :debug
   
   validates :code, :name, :index, :active, :debug , :presence => true
   
-  def initialize attributes={}
-    attributes = {:outputs => OutputArray.new(self),
+  DEBUG_LEVELS = [:fatal, :warning, :info, :debug]
+  
+  def initialize code, attributes={}
+    attributes = {:code => code, :outputs => OutputArray.new(self),
       :inputs => InputArray.new(self),
       :constants => Array.new,
       :initial_variables => Array.new,
@@ -30,6 +33,10 @@ class Block
   # check if modes given
   def modes?
     !@modes.nil? && !@modes.empty?
+  end
+  
+  def debug_level
+    DEBUG_LEVELS.index(debug)
   end
   
   # check if active
@@ -63,8 +70,17 @@ class Block
   end
   
   # Get output n for this block
-  def output(n)
-    Output.new(self, n).code("O#{n}")
+  def output(n=nil)
+    out = Output.new(self, n)
+    out.code(n.is_a?(Integer) ? "O#{n}" : n) unless n.nil?
+    out
+  end
+  
+  # Get input n for this block
+  def input(n=nil)
+    inp = Input.new(self, n)
+    inp.code(n.is_a?(Integer) ? "I#{n}" : n) unless n.nil?
+    inp
   end
   
   private

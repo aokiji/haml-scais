@@ -14,7 +14,7 @@ module Attributed
     attributes.each do |key, val| 
       if respond_to?("#{key}=")
         send("#{key}=", val) 
-        @attributes[key] = name
+        @attributes[key] = val
       end
     end
   end

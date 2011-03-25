@@ -1,17 +1,17 @@
 class Funin < Block
-  attr_writer :formula
-  chainable_methods :formula
+  attr_chainable :formula
   
   validates :formula, :presence => true
-  validates :outputs, :many => {:maximum => 1}
+  validates :outputs, :many => {:exact => 1}
   
   def initialize code, attributes={}
-    super attributes.merge(:code => code, :module => 'FUNIN')
+    super code, attributes.merge(:module => 'FUNIN')
   end
   
   # add constants before validation
   def before_validate
     self.constants={ 'FORMULA' => formula}
+    self.outputs<< output(0) if self.outputs.empty?
     super
   end
 end

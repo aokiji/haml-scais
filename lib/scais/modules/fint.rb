@@ -2,10 +2,11 @@ class Fint < Block
   attr_chainable :times, :coefs
   
   validates :times, :coefs, :presence => true
-  validates :inputs, :many => {:maximum => 0}
+  validates :inputs, :many => {:exact => 0}
+  validates :outputs, :many => {:exact => 1}
   
   def initialize code, attributes={}
-    super attributes.merge(:code => code, :module => 'FINT')
+    super code, attributes.merge(:module => 'FINT')
   end
   
   # add constants before validation

@@ -1,9 +1,15 @@
 class Input
-  attr_accessor :code, :recursive, :from, :accelerator
-  attr_reader :modes
+  include Chainable
+  include Attributed
   
-  def initialize
+  attr_chainable :code, :recursive, :alias, :from, :acelerator, :block, :n
+  attr_chainable_reader :modes
+  
+  def initialize(block, n=0, attributes={})
+    @block = block
+    @n = 0
     @recursive = false
+    self.attributes=attributes
   end
   
   # check if recursive
@@ -26,5 +32,10 @@ class Input
   # check if modes given
   def modes?
     !@modes.nil? && !@modes.empty?
+  end
+  
+  # check if alias given
+  def alias?
+    !@alias.nil? && !@alias.empty?
   end
 end
