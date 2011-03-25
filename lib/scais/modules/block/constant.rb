@@ -20,7 +20,7 @@ class Constant
       elsif double? && value.is_a?(Array) 
         value.join(',')
       else
-        value
+        value.to_s
       end
     end
     

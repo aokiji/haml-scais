@@ -2,7 +2,7 @@ class Logate < Block
   attr_chainable :low, :high, :condition
   attr_writer :initial_output
   
-  validates :low, :high, :condition, :initial_output, :presence => true
+  validates :low, :high, :condition, :presence => true
   validates :outputs, :many => {:exact => 1}
   
   def initialize code, attributes={}
@@ -20,7 +20,7 @@ class Logate < Block
     self.inputs<< high.code('IN_HIGH')
     self.inputs<< low.code('IN_LOW')
     args= ['INITIALOUTPUT']+@initial_output
-    self.initial_variables<< InitialVariable.new(*args)
+    self.initial_variables<< InitialVariable.new(*args) unless self.initial_output.nil?
     super
   end
   

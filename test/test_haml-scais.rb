@@ -67,4 +67,15 @@ class TestHamlScais < Test::Unit::TestCase
     logate.initial_output(0, :alias => 'INITSTATE')
     puts logate.to_xml
   end
+  
+  def test_logate_handler
+    lh = LogateHandler.new('B5').name('LogateModeChange').debug(:info).active(true).index(5).modes('ALL')
+    lh.outputs<< lh.output.alias('LOGAT1')
+    lh.inputs<< lh.input.from(Block.new('B4').output(0)).alias('I0').modes('ALL')
+    lh.previous_output :alias => 'PREVOUT'
+    lh.initial_output(0, :alias => 'INITOUT')
+    lh.precision = 0.005
+    lh.formula = "(TIME<2.3) and (I0>1)"
+    puts lh.to_xml
+  end
 end

@@ -1,7 +1,11 @@
 class InternalVariable
-  attr_accessor :code, :initial_value, :alias
+  include Chainable
+  include Attributed
   
-  def initialize code
+  attr_chainable :code, :initial_value, :alias
+  
+  def initialize code, attributes
     @code = code
+    self.attributes = attributes
   end
 end
