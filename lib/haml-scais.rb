@@ -1,4 +1,5 @@
 require 'haml'
+require 'scais/helpers'
 require 'scais/scais'
 require 'scais/topology'
 

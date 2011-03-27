@@ -1,7 +1,7 @@
 module Scais
   module Topology
     class Funin < Block::Base
-      attr_chainable :formula
+      constants :formula
       
       validates :formula, :presence => true
       validates :outputs, :many => {:exact => 1}
@@ -12,7 +12,6 @@ module Scais
       
       # add constants before validation
       def before_validate
-        self.constants={ 'FORMULA' => formula}
         self.outputs<< output(0) if self.outputs.empty?
         super
       end

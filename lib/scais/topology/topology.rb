@@ -2,8 +2,8 @@ module Scais
   module Topology
     include Block
     class Topology
-      include Chainable
-      include Attributed
+      include Scais::Helpers::Chainable
+      include Scais::Helpers::Attributed
       
       attr_reader :code
       attr_accessor :current_block

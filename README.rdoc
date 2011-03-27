@@ -1,6 +1,49 @@
 = haml-scais
 
-Description goes here.
+haml-scais attempts to simplify scais xml generation by extending haml features to add scais module generation.
+
+== Features
+
+* Automatic index generation for topologies
+* Topology module generation with an easy syntax
+* Allow the use of variable and constant in scais xml generation
+
+== Getting Started
+
+First you should download the latest haml and haml-scais version.
+
+To use haml-scais inside a haml file add the following line to the beginning
+* - require 'haml-scais'
+
+== First Example
+
+Create a topology file 'topo.haml' and copy the following lines.
+# topo.haml
+- require 'haml-scais'
+!!!XML
+= topo = Topology.new('TankVolumeAuto').description('Tank Topology for Volume Automatic Protection').name('TopoTankVolumeAuto') do |topo|
+  - topo.add_block Fint.new('BF1').times((1..10).to_a).coefs(((1..10).to_a))
+
+Now lets generate the xml with
+* haml -q topo.haml topo.xml
+
+The resulting xml should be something like this
+# topo.xml
+<?xml version='1.0' encoding='utf-8' ?>
+<Topology Code="TankVolumeAuto" Description="Tank Topology for Volume Automatic Protection" Name="TopoTankVolumeAuto" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///home/nico/csn/scais/BABIECA/Schema/Topology.xsd">
+  <block Code="BF1" FlagActive="1" ModuleType="FINT" Name="BF1">
+    <index>1</index>
+    <output Code="O0" FlagSave="0">
+    </output>
+    <constant Code="TIME">
+      <value>1,2,3,4,5,6,7,8,9,10</value>
+    </constant>
+    <constant Code="COEF">
+      <value>1,2,3,4,5,6,7,8,9,10</value>
+    </constant>
+  </block>
+  
+</Topology>
 
 == Contributing to haml-scais
  

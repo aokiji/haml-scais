@@ -2,9 +2,10 @@ module Scais
   module Topology
     module Block
       class Base
-        include Chainable
+        include Scais::Helpers::Chainable
         include Validations
-        include Attributed
+        include Scais::Helpers::Builder
+        include Scais::Helpers::Attributed
         include Renderer
         
         attr_accessor :module, :code, :outputs, :inputs, :initial_variables, :internal_variables
@@ -17,10 +18,10 @@ module Scais
         DEBUG_LEVELS = [:fatal, :warning, :info, :debug]
         
         def initialize code, attributes={}
+          @constants = Array.new
+          @initial_variables = Array.new
           attributes = {:code => code, :outputs => OutputArray.new(self),
             :inputs => InputArray.new(self),
-            :constants => Array.new,
-            :initial_variables => Array.new,
             :internal_variables => Array.new
           }.merge(attributes)
           self.attributes = attributes

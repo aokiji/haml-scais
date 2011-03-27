@@ -2,8 +2,8 @@ module Scais
   module Topology
     module Block
       class InternalVariable
-        include Chainable
-        include Attributed
+        include Scais::Helpers::Chainable
+        include Scais::Helpers::Attributed
         
         attr_chainable :code, :initial_value, :alias
         

@@ -1,5 +1,4 @@
-require 'scais/chainable'
-require 'scais/attributed'
+require 'scais/topology/block/helpers'
 require 'scais/topology/block/output'
 require 'scais/topology/block/output_array'
 require 'scais/topology/block/input'

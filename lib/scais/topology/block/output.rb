@@ -2,8 +2,8 @@ module Scais
   module Topology
     module Block
       class Output
-        include Chainable
-        include Attributed
+        include Scais::Helpers::Chainable
+        include Scais::Helpers::Attributed
         
         attr_chainable :code, :save, :alias, :initial_value, :block, :n
         
@@ -29,7 +29,7 @@ module Scais
         
         # check alias available
         def alias?
-          !@alias.nil? && !@alias.empty?
+          !@alias.nil? && !@alias.to_s.empty?
         end
         
         def to_s

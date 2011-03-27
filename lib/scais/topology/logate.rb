@@ -1,8 +1,9 @@
 module Scais
   module Topology
     class Logate < Block::Base
-      attr_chainable :low, :high, :condition
-      attr_writer :initial_output
+      attr_chainable :low, :high
+      constants :condition => :formula
+      initial_variables :initial_output
       
       validates :low, :high, :condition, :presence => true
       validates :outputs, :many => {:exact => 1}
@@ -11,18 +12,11 @@ module Scais
         super code, attributes.merge(:module => 'LOGATE')
       end
       
-      def initial_output *args
-        args.empty? ? @initial_output : (@initial_output = args) && self 
-      end
-      
       # add constants before validation
       def before_validate
-        self.constants={ 'FORMULA' => condition}
         self.outputs<< output(0) if self.outputs.empty?
         self.inputs<< high.code('IN_HIGH')
         self.inputs<< low.code('IN_LOW')
-        args= ['INITIALOUTPUT']+@initial_output
-        self.initial_variables<< InitialVariable.new(*args) unless self.initial_output.nil?
         super
       end
       

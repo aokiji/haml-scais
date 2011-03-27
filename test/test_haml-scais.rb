@@ -78,4 +78,28 @@ class TestHamlScais < Test::Unit::TestCase
     lh.formula = "(TIME<2.3) and (I0>1)"
     puts lh.to_xml
   end
+  
+  def test_convex
+    c = Convex.new('B9', :name => 'CONVEX LAG-2MODE').active(true).debug(:info).index(9).modes('B')
+    c.outputs<< c.output.save(true).alias('NUM-B')
+    c.inputs<< c.input.from(Block::Base.new('B7').output(0)).modes('B')
+    c.roots = [-0.5, 0.5]
+    c.vforz = 0
+    c.previous_input :alias => 'PREVIN'
+    c.previous_output :alias => 'PREVOUT'
+    c.initial_output :alias => 'PREVOUT'
+    puts c.to_xml 
+  end
+  
+  def test_vmetodo
+    topo = Topology.new("OsciladorVanPol", :description => "Diferential Ecuation Resolution", :name => "OsciladorVanPol") do |topo|
+      b1 = Vmetodo.new('B1').name('VMETODO').active(true).debug(:info).modes('ALL')
+      b1.yp1 'y2', :alias => 'yp1', :save => true
+      b1.yp2 '-y1 + cos(1.41 * Vmetodo::TIME)', :alias => 'yp2', :save => true
+      b1.y1 0.01, :alias => :y1, :save => true
+      b1.y2 0.00001, :alias => :y2, :save => true
+      topo.add_block b1
+    end
+    puts topo.to_xml
+  end
 end

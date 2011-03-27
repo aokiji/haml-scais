@@ -2,8 +2,8 @@ module Scais
   module Topology
     module Block
       class Input
-        include Chainable
-        include Attributed
+        include Scais::Helpers::Chainable
+        include Scais::Helpers::Attributed
         
         attr_chainable :code, :recursive, :alias, :from, :acelerator, :block, :n
         attr_chainable_reader :modes

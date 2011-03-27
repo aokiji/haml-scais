@@ -1,7 +1,7 @@
 module Scais
   module Topology
     class Fint < Block::Base
-      attr_chainable :times, :coefs
+      constants :times => :time, :coefs => :coef
       
       validates :times, :coefs, :presence => true
       validates :inputs, :many => {:exact => 0}
@@ -13,7 +13,6 @@ module Scais
       
       # add constants before validation
       def before_validate
-        self.constants={ 'TIME' => times, 'COEF' => coefs}
         self.outputs<< output(0) if self.outputs.empty?
         super
       end
