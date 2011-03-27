@@ -26,7 +26,7 @@ module Scais
           block.index(current_block)
           self.current_block+=1
         end
-        # concat to the haml buffer2
+        # concat to the haml buffer
         self.haml_concat block.to_xml
       end
       

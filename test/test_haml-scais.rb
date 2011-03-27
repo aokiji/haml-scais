@@ -102,4 +102,9 @@ class TestHamlScais < Test::Unit::TestCase
     end
     puts topo.to_xml
   end
+  
+  def test_acelerator
+    a = Acelerator.new('Acc1', :mode => 'PASSIVE').threshold(1).max_iterations(10)
+    puts a.to_xml
+  end
 end

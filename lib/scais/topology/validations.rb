@@ -20,7 +20,7 @@ module Validations
           validator.new.validate(self, attribute, opts)
         end
       end
-      raise Exception.new("Errors in #{self.to_s} -- #{errors.inspect}") unless self.errors.empty?
+      raise Exception.new("Errors in #{self.identify} -- #{errors.inspect}") unless self.errors.empty?
     end
   end
   

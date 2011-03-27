@@ -68,9 +68,13 @@ module Scais
           render File.expand_path('../../haml/block.haml', __FILE__), self
         end
         
-        def to_s
+        def identify
           s="#{self.class.name}"
           s << ":'#{code}'" unless code.nil?
+        end
+        
+        def to_s
+          to_xml
         end
         
         # Get output n for this block
