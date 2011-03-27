@@ -98,6 +98,7 @@ class TestHamlScais < Test::Unit::TestCase
       b1.yp2 '-y1 + cos(1.41 * Vmetodo::TIME)', :alias => 'yp2', :save => true
       b1.y1 0.01, :alias => :y1, :save => true
       b1.y2 0.00001, :alias => :y2, :save => true
+      puts "HOLA"
       topo.add_block b1
     end
     puts topo.to_xml
@@ -106,5 +107,16 @@ class TestHamlScais < Test::Unit::TestCase
   def test_acelerator
     a = Acelerator.new('Acc1', :mode => 'PASSIVE').threshold(1).max_iterations(10)
     puts a.to_xml
+  end
+  
+  def test_integrator
+    c = Integrator.new('B9', :name => 'CONVEX LAG-2MODE').active(true).debug(:info).index(9).modes('B')
+    c.outputs<< c.output.save(true).alias('NUM-B')
+    c.inputs<< c.input.from(Block::Base.new('B7').output(0)).modes('B')
+    c.vforz = 0
+    c.previous_input :alias => 'PREVIN'
+    c.previous_output :alias => 'PREVOUT'
+    c.initial_output :alias => 'PREVOUT'
+    puts c.to_xml
   end
 end

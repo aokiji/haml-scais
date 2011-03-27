@@ -19,5 +19,11 @@ module Scais
         super
       end
     end
+    
+    class Integrator < Convex
+      def initialize code, attributes={}
+        super code, attributes.merge(:roots => [0, 1])
+      end
+    end
   end
 end

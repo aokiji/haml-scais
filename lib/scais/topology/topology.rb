@@ -27,7 +27,7 @@ module Scais
           self.current_block+=1
         end
         # concat to the haml buffer
-        self.haml_concat block.to_xml
+        haml_concat block.to_xml
       end
       
       #defines schema location
@@ -42,7 +42,10 @@ module Scais
       def to_xml
         topo = self
         blck = topo_block
-        render(File.expand_path("../haml/topology.haml", __FILE__), self, {}, &block = Proc.new {blck.call(topo) if blck})
+        block = Proc.new {
+          haml_concat capture_haml(topo, &block = blck)
+        } if blck
+        render(File.expand_path("../haml/topology.haml", __FILE__), self, {}, &block = block)
       end
       
       def to_s
