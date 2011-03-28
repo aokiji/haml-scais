@@ -25,6 +25,13 @@ module Scais
           recursive? ? 1 : 0
         end
         
+        def acelerator= *args
+          args.flatten!
+          options = args.last.is_a?(Hash) ? args.pop : {}
+          code = args.shift
+          @acelerator = {:code => code, :options => options}
+        end
+        
         # set modes for block. accepts Array and String.
         # if Array provided if extends instance to_s method to print separated by ',' elements
         def modes= m

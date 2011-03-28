@@ -44,6 +44,7 @@ module Scais
         
         # concat to the haml buffer
         haml_concat block.to_xml
+        block
       end
       
       #defines schema location

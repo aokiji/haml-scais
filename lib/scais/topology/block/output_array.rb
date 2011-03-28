@@ -19,7 +19,7 @@ module Scais
         # used to generate inputs in block call from Block class.
         def output
           b = block.output
-          push b
+          self<< b
           b
         end
         

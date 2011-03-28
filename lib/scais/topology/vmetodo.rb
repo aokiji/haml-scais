@@ -28,6 +28,7 @@ module Scais
           else
             set_equation(n, *args)
           end
+          self
         elsif sym.to_s =~ /^y\d+$/
           n = sym.to_s[/\d+/]
           set_variable(n, *args)

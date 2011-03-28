@@ -85,9 +85,6 @@ class TestHamlScais < Test::Unit::TestCase
     c.inputs<< c.input.from(Block::Base.new('B7').output(0)).modes('B')
     c.roots = [-0.5, 0.5]
     c.vforz = 0
-    c.previous_input :alias => 'PREVIN'
-    c.previous_output :alias => 'PREVOUT'
-    c.initial_output :alias => 'PREVOUT'
     puts c.to_xml 
   end
   
@@ -105,6 +102,11 @@ class TestHamlScais < Test::Unit::TestCase
   end
   
   def test_acelerator
+    fint = Fint.new('BF1').times((1..10).to_a).coefs(((1..10).to_a))
+    fint.inputs do
+      input.from('BI1').recursive(true).acelerator('Acc1', :threshold => 100)
+    end
+    puts fint
     a = Acelerator.new('Acc1', :mode => 'PASSIVE').threshold(1).max_iterations(10)
     puts a.to_xml
   end

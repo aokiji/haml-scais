@@ -15,6 +15,9 @@ module Scais
       
       # add constants before validation
       def before_validate
+        self.initial_output :alias => 'PREVOUT' unless self.initial_output
+        self.previous_input :alias => 'PREVIN' unless self.previous_input
+        self.previous_output :alias => 'PREVOUT' unless self.previous_output
         self.outputs<< output(0) if self.outputs.empty?
         super
       end

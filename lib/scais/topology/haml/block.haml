@@ -28,7 +28,7 @@
       %link{ 'FlagRecursive' => input.recursive_value }
         %outputbranch= input.from
         - if input.recursive?
-          %usedaccelerator= input.acelerator
+          %usedaccelerator{input.acelerator[:options]}= input.acelerator[:code]
         - if input.modes?
           %modes= input.modes
       -#
