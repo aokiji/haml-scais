@@ -12,20 +12,19 @@ haml-scais attempts to simplify scais xml generation by extending haml features 
 
 First you should download the latest haml and haml-scais version.
 
-To use haml-scais inside a haml file add the following line to the beginning
-  - require 'haml-scais'
+You can include haml-scais instruction in your haml file just like any code but at
+generation time you should execute haml-scais command instead of haml.
 
 == Example
 
 Create a topology file 'topo.haml' and copy the following lines.
   # topo.haml
-  - require 'haml-scais'
   !!!XML
   = topo = Topology.new('TankVolumeAuto').description('Tank Topology for Volume Automatic Protection').name('TopoTankVolumeAuto') do |topo|
     - topo.add_block Fint.new('BF1').times((1..10).to_a).coefs(((1..10).to_a))
 
-Now lets generate the xml with
-  haml -q topo.haml topo.xml
+Now lets generate the xml
+  haml-scais topo.haml topo.xml
 
 The resulting xml should be something like this
   # topo.xml

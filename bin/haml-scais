@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+# The command line Haml-Scais parser.
+
+$LOAD_PATH.unshift File.dirname(__FILE__) + '/../lib'
+require 'rubygems'
+require 'haml'
+require 'haml/exec'
+require 'haml-scais'
+
+ARGV<< "-q"
+opts = Haml::Exec::Haml.new(ARGV)
+opts.parse!
