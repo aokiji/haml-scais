@@ -8,8 +8,9 @@ module Scais
         include Scais::Helpers::Attributed
         include Renderer
         
-        attr_accessor :module, :code, :outputs, :inputs, :initial_variables, :internal_variables
+        attr_accessor :module, :code, :initial_variables, :internal_variables
         attr_reader :constants
+        attr_writer :inputs, :outputs
         attr_chainable_reader :modes
         attr_chainable :index, :name, :active, :module, :debug
         
@@ -89,6 +90,26 @@ module Scais
           inp = Input.new(self, n)
           inp.code(n.is_a?(Integer) ? "I#{n}" : n) unless n.nil?
           inp
+        end
+        
+        # Get/Set inputs
+        def inputs &block
+          if block_given? 
+            @inputs.instance_eval &block
+            self
+          else
+            @inputs
+          end
+        end
+        
+        # Get/Set outputs
+        def outputs &block
+          if block_given? 
+            @outputs.instance_eval &block
+            self
+          else
+            @outputs
+          end
         end
         
         private

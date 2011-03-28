@@ -119,4 +119,31 @@ class TestHamlScais < Test::Unit::TestCase
     c.initial_output :alias => 'PREVOUT'
     puts c.to_xml
   end
+  
+  def test_new_syntax
+    topo= Topology.new('Topo1').name('Topology').description('Description') do |topo|
+      topo.add_block do
+        Fint.new('BF1').times((1..10).to_a).coefs(((1..10).to_a))
+      end
+      topo.add_block do
+        Fint.new('BF1', :index => 3, :times => ((1..10).to_a), :coefs => ((1..10).to_a))
+      end
+      topo.add_block do
+        fint = 1.Fint('BF1')
+        fint.outputs<< fint.output(0).alias('JA').save(true)
+        fint
+      end
+      topo.add_block do
+        funin = Funin.new('B8', :name =>'FUNIN EXP-2', :active => true).debug(:fatal).index(8).modes('B')
+        funin.outputs do 
+          output.save(true).alias('ANALYT2')
+        end
+        funin.formula "I0+sqrt(2/5)*exp((TAU-TIME)/2)*sin(0.5*(sqrt(5)*(TIME-TAU)*PI)"
+        funin.inputs do 
+          input.alias('I0').from(Block::Base.new('B1').output(0)).modes('B')
+        end
+      end
+    end
+    puts topo.to_xml
+  end
 end

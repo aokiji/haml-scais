@@ -15,6 +15,14 @@ module Scais
           super obj
         end
         
+        # Generate new input for the block
+        # used to generate inputs in block call from Block class.
+        def output
+          b = block.output
+          push b
+          b
+        end
+        
         private
         def parse options
           Output.new block

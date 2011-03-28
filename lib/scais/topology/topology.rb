@@ -19,13 +19,29 @@ module Scais
       
       # add a block to the topology.
       # automatically add index incrementing 1 by 1 if missing
-      def add_block block
+      #
+      # can be call with a topology block
+      #   topo.add_block topo_block
+      #
+      # or can be called with a ruby block evaluating to a
+      # topology block
+      #   topo.add_block do
+      #     topo_block
+      #   end
+      def add_block block=nil, &proc
+        # if proc given instead of block, evaluate it
+        if block.nil? && block_given?
+          block = yield
+        end
+        
+        # automatic block indexing
         if block.index
           self.current_block = block.index+1
         else
           block.index(current_block)
           self.current_block+=1
         end
+        
         # concat to the haml buffer
         haml_concat block.to_xml
       end
