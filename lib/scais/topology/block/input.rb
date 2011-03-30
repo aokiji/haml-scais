@@ -5,8 +5,8 @@ module Scais
         include Scais::Helpers::Chainable
         include Scais::Helpers::Attributed
         
-        attr_chainable :code, :recursive, :alias, :from, :acelerator, :block, :n
-        attr_chainable_reader :modes
+        attr_chainable :code, :recursive, :alias, :block, :n
+        attr_chainable_reader :modes, :from, :acelerator
         
         def initialize(block, n=0, attributes={})
           @block = block
@@ -23,6 +23,20 @@ module Scais
         # 1 if recursive true 0 otherwise
         def recursive_value
           recursive? ? 1 : 0
+        end
+        
+        # from setter
+        def from= output
+          if output.is_a?(Output)
+            @from = output
+          elsif output.is_a?(String)
+            str = output.split('.')
+            blck = str[0]
+            c = str[1] || "O0"
+            @from = Output.new(Block::Base.new(blck), c)
+          elsif output.is_a?(Block::Base)
+            @from = output.output(0)
+          end
         end
         
         def acelerator= *args

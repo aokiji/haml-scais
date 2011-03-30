@@ -130,7 +130,7 @@ class TestHamlScais < Test::Unit::TestCase
       topo.add_block do
         Fint.new('BF1', :index => 3, :times => ((1..10).to_a), :coefs => ((1..10).to_a))
       end
-      topo.add_block do
+      fint = topo.add_block do
         fint = 1.Fint('BF1')
         fint.outputs<< fint.output(0).alias('JA').save(true)
         fint
@@ -142,7 +142,7 @@ class TestHamlScais < Test::Unit::TestCase
         end
         funin.formula "I0+sqrt(2/5)*exp((TAU-TIME)/2)*sin(0.5*(sqrt(5)*(TIME-TAU)*PI)"
         funin.inputs do 
-          input.alias('I0').from(Block::Base.new('B1').output(0)).modes('B')
+          input.alias('I0').from(fint).modes('B')
         end
       end
     end
