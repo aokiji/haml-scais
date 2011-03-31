@@ -179,4 +179,19 @@ class TestHamlScais < Test::Unit::TestCase
     b.select_for 'O2', :time => 3, :value => 4
     puts b.to_xml
   end
+  
+  def test_in_high
+    logate = Logate.new('B16').name('MULTIPLEXOR').active(true).debug(:info).index(16).modes('ALL')
+    logate.outputs do 
+      output.alias('MULTIPLEXACION').save(true)
+    end
+    logate.inputs do
+      input.alias('I0').from('B1').modes('ALL')
+    end
+    #logate.high.from('B14').modes('ALL').alias('IN_HIGH')
+    #logate.low.from('B15').modes('ALL').alias('IN_LOW')
+    logate.condition "I0>0"
+    logate.initial_output(0, :alias => 'INITSTATE')
+    puts logate.to_xml
+  end
 end

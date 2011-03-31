@@ -9,16 +9,22 @@ module Scais
       validates :outputs, :many => {:exact => 1}
       
       def initialize code, attributes={}
-        @low = Input.new(self)
-        @high = Input.new(self)
         super code, attributes.merge(:module => 'LOGATE')
+      end
+      
+      def low
+        @low||= Input.new(self)
+      end
+      
+      def high
+        @high||= Input.new(self)
       end
       
       # add constants before validation
       def before_validate
         self.outputs<< output(0) if self.outputs.empty?
-        self.inputs<< high.code('IN_HIGH')
-        self.inputs<< low.code('IN_LOW')
+        self.inputs<< high.code('IN_HIGH') unless @high.nil?
+        self.inputs<< low.code('IN_LOW') unless @low.nil?
         super
       end
       
