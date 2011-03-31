@@ -32,7 +32,9 @@ class TestHamlScais < Test::Unit::TestCase
   
   def test_fint
     fint = Fint.new('B1').name('FINT TRIGGER').debug(:info).index(1).modes('ALL')
-    fint.outputs<< fint.output.save(true).alias('TRIGGER')
+    fint.outputs do
+      output.save(true).alias('TRIGGER')
+    end
     fint.times([-100,0.1,0.1,100])
     fint.coefs([0,0,1,1])
     puts fint.to_xml
@@ -51,38 +53,54 @@ class TestHamlScais < Test::Unit::TestCase
   
   def test_funin
     funin = Funin.new('B8', :name =>'FUNIN EXP-2', :active => true).debug(:fatal).index(8).modes('B')
-    funin.outputs<< funin.output.save(true).alias('ANALYT2')
-    funin.inputs<< funin.input.alias('I0').from(Block::Base.new('B1').output(0)).modes('B')
-    funin.formula = "I0+sqrt(2/5)*exp((TAU-TIME)/2)*sin(0.5*(sqrt(5)*(TIME-TAU)*PI)"
+    funin.outputs do
+      output.save(true).alias('ANALYT2')
+    end
+    funin.inputs do
+      input.alias('I0').from('B1').modes('B')
+    end
+    funin.formula "I0+sqrt(2/5)*exp((TAU-TIME)/2)*sin(0.5*(sqrt(5)*(TIME-TAU)*PI)"
     puts funin.to_xml
   end
   
   def test_logate
     logate = Logate.new('B16').name('MULTIPLEXOR').active(true).debug(:info).index(16).modes('ALL')
-    logate.outputs<< logate.output.alias('MULTIPLEXACION').save(true)
-    logate.inputs<< logate.input(0).alias('I0').from(Block::Base.new('B1').output('TRIGGER')).modes('ALL')
+    logate.outputs do 
+      output.alias('MULTIPLEXACION').save(true)
+    end
+    logate.inputs do
+      input.alias('I0').from('B1').modes('ALL')
+    end
     logate.high.from('B14').modes('ALL').alias('IN_HIGH')
     logate.low.from('B15').modes('ALL').alias('IN_LOW')
-    logate.condition = "I0>0"
+    logate.condition "I0>0"
     logate.initial_output(0, :alias => 'INITSTATE')
     puts logate.to_xml
   end
   
   def test_logate_handler
     lh = LogateHandler.new('B5').name('LogateModeChange').debug(:info).active(true).index(5).modes('ALL')
-    lh.outputs<< lh.output.alias('LOGAT1')
-    lh.inputs<< lh.input.from(Block::Base.new('B4').output(0)).alias('I0').modes('ALL')
+    lh.outputs do
+      output.alias('LOGAT1')
+    end
+    lh.inputs do
+      input.from('B4').alias('I0').modes('ALL')
+    end
     lh.previous_output :alias => 'PREVOUT'
     lh.initial_output(0, :alias => 'INITOUT')
-    lh.precision = 0.005
-    lh.formula = "(TIME<2.3) and (I0>1)"
+    lh.precision 0.005
+    lh.formula "(TIME<2.3) and (I0>1)"
     puts lh.to_xml
   end
   
   def test_convex
     c = Convex.new('B9', :name => 'CONVEX LAG-2MODE').active(true).debug(:info).index(9).modes('B')
-    c.outputs<< c.output.save(true).alias('NUM-B')
-    c.inputs<< c.input.from(Block::Base.new('B7').output(0)).modes('B')
+    c.outputs do
+      output.save(true).alias('NUM-B')
+    end
+    c.inputs do
+      input.from('B7').modes('B')
+    end
     c.roots = [-0.5, 0.5]
     c.vforz = 0
     puts c.to_xml 
@@ -95,7 +113,6 @@ class TestHamlScais < Test::Unit::TestCase
       b1.yp2 '-y1 + cos(1.41 * Vmetodo::TIME)', :alias => 'yp2', :save => true
       b1.y1 0.01, :alias => :y1, :save => true
       b1.y2 0.00001, :alias => :y2, :save => true
-      puts "HOLA"
       topo.add_block b1
     end
     puts topo.to_xml

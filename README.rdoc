@@ -80,6 +80,132 @@ To add blocks to a topology we use add_block method. This can be called either w
     fint = Fint.new('BF-2')
     fint.index(3) # remember that most setter methods in this form return the block
   end
+  
+You can print the topology xml structure using to_xml method
+  
+== Topology Blocks
+
+All blocks are subclasses of Block::Base so they all have a similar behaviour.
+
+Common block attributes
+* modes
+* name
+* active (boolean)
+* debug (accepts :info, :debug, :warning, :fatal)
+* code
+
+Setting outputs
+  block.outputs do
+    output                              # output with default configuration
+    output.save(true).alias('Output 0') # output saved, with alias 'Output 0'
+    ...
+  end
+  
+Setting inputs
+  # generate blocks
+  fu = Funin.new('B1')
+  ...
+  vm = Vmetodo.new('BVm')
+  ...
+  
+  block = ... # block of some kind
+  # connect block input from fu output
+  block.inputs do
+    input.from('B1.O0')              # input as block.output
+    input.from('B1')                 # if no output given, default is O0
+    input.from(fu)                   # if block given, takes O0 from block
+    input.from(fu.output(0))         # also you can give the output directly
+  end
+  
+  # what if we have a vmetodo block?
+  block.inputs do
+    input.from('BVm.YP1')
+    input.from(vm.output(:yp1))
+  end
+
+=== Funin
+To set up funin formula, use the formula chainable method
+  funin.formula formula_string
+
+Example
+  funin = Funin.new('B8', :name =>'FUNIN EXP-2', :active => true).debug(:fatal).index(8).modes('B')
+  funin.outputs do
+    output.save(true).alias('ANALYT2')
+  end
+  funin.inputs do
+    input.alias('I0').from('B1').modes('B')
+  end
+  funin.formula "I0+sqrt(2/5)*exp((TAU-TIME)/2)*sin(0.5*(sqrt(5)*(TIME-TAU)*PI)"
+    
+=== Fint
+To create a fint module you have to set times and coefs. This are chainable methods that accept arrays of values
+
+Example
+  fint = Fint.new('B1').name('FINT TRIGGER').debug(:info).index(1).modes('ALL')
+  fint.outputs do
+    output.save(true).alias('TRIGGER')
+  end
+  fint.times([-100,0.1,0.1,100])
+  fint.coefs([0,0,1,1])
+
+=== Convex
+
+Example
+  c = Convex.new('B9', :name => 'CONVEX LAG-2MODE').active(true).debug(:info).index(9).modes('B')
+  c.outputs do
+    output.save(true).alias('NUM-B')
+  end
+  c.inputs do
+    input.from('B7').modes('B')
+  end
+  c.roots = [-0.5, 0.5]
+  c.vforz = 0
+  
+=== Logate
+
+Example
+  logate = Logate.new('B16').name('MULTIPLEXOR').active(true).debug(:info).index(16).modes('ALL')
+  logate.outputs do 
+    output.alias('MULTIPLEXACION').save(true)
+  end
+  logate.inputs do
+    input.alias('I0').from('B1').modes('ALL')
+  end
+  logate.high.from('B14').modes('ALL').alias('IN_HIGH')
+  logate.low.from('B15').modes('ALL').alias('IN_LOW')
+  logate.condition "I0>0"
+  logate.initial_output(0, :alias => 'INITSTATE')
+  
+=== LogateHandler
+
+Example
+  lh = LogateHandler.new('B5').name('LogateModeChange').debug(:info).active(true).index(5).modes('ALL')
+  lh.outputs do
+    output.alias('LOGAT1')
+  end
+  lh.inputs do
+    input.from('B4').alias('I0').modes('ALL')
+  end
+  lh.previous_output :alias => 'PREVOUT'
+  lh.initial_output(0, :alias => 'INITOUT')
+  lh.precision 0.005
+  lh.formula "(TIME<2.3) and (I0>1)"
+  
+=== Vmetodo
+
+Example
+  topo = Topology.new("OsciladorVanPol", :description => "Diferential Ecuation Resolution", :name => "OsciladorVanPol") do |topo|
+    b1 = Vmetodo.new('B1').name('VMETODO').active(true).debug(:info).modes('ALL')
+    b1.yp1 'y2', :alias => 'yp1', :save => true
+    b1.yp2 '-y1 + cos(1.41 * Vmetodo::TIME)', :alias => 'yp2', :save => true
+    b1.y1 0.01, :alias => :y1, :save => true
+    b1.y2 0.00001, :alias => :y2, :save => true
+    topo.add_block b1
+  end
+
+=== Acelerator
+Example
+  Acelerator.new('Acc1', :mode => 'PASSIVE').threshold(1).max_iterations(10)
 
 == Contributing to haml-scais
  

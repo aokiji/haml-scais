@@ -8,11 +8,11 @@ module Scais
         include Scais::Helpers::Attributed
         include Renderer
         
-        attr_accessor :module, :code, :initial_variables, :internal_variables
+        attr_accessor :initial_variables, :internal_variables
         attr_reader :constants
         attr_writer :inputs, :outputs
         attr_chainable_reader :modes
-        attr_chainable :index, :name, :active, :module, :debug
+        attr_chainable :index, :name, :active, :module, :debug, :code
         
         validates :code, :name, :index, :active, :debug , :presence => true
         
