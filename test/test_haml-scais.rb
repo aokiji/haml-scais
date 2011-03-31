@@ -167,7 +167,7 @@ class TestHamlScais < Test::Unit::TestCase
   end
   
   def test_files
-    b = Files.new('B1').name('FILES Triple BC').active(true).debug(:warning).index(1).modes('ALL')
+    b = Files.new('B1').name('FILES Triple BC').active(true).debug(:debug).index(1).modes('ALL')
     b.outputs do
       output.save(true).alias('BC-1')
       output.save(true).alias('BC-2')

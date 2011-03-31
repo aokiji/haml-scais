@@ -202,6 +202,20 @@ Example
     b1.y2 0.00001, :alias => :y2, :save => true
     topo.add_block b1
   end
+  
+=== Files
+
+Example
+  b = Files.new('B1').name('FILES Triple BC').active(true).debug(:info).index(1).modes('ALL')
+  b.outputs do
+    output.save(true).alias('BC-1')
+    output.save(true).alias('BC-2')
+    output.save(true).alias('BC-3')
+  end
+  b.file 'path-to-file/data.dat'
+  b.select_for 'O0', :time => 0, :value => 1
+  b.select_for 'O1', :time => 0, :value => 2
+  b.select_for 'O2', :time => 3, :value => 4
 
 === Acelerator
 Example
