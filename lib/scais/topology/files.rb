@@ -26,6 +26,7 @@ module Scais
         
         #add constant
         self.constants<< Constant.new(output, "#{options[:time]},#{options[:value]}")
+        self
       end
     end
     
