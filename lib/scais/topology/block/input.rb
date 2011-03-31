@@ -10,7 +10,7 @@ module Scais
         
         def initialize(block, n=0, attributes={})
           @block = block
-          @n = 0
+          @n = n
           @recursive = false
           self.attributes=attributes
         end

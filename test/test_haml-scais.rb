@@ -61,8 +61,8 @@ class TestHamlScais < Test::Unit::TestCase
     logate = Logate.new('B16').name('MULTIPLEXOR').active(true).debug(:info).index(16).modes('ALL')
     logate.outputs<< logate.output.alias('MULTIPLEXACION').save(true)
     logate.inputs<< logate.input(0).alias('I0').from(Block::Base.new('B1').output('TRIGGER')).modes('ALL')
-    logate.high = logate.input.from(Block::Base.new('B14').output(0)).modes('ALL').alias('IN_HIGH')
-    logate.low = logate.input.from(Block::Base.new('B15').output(0)).modes('ALL').alias('IN_LOW')
+    logate.high.from('B14').modes('ALL').alias('IN_HIGH')
+    logate.low.from('B15').modes('ALL').alias('IN_LOW')
     logate.condition = "I0>0"
     logate.initial_output(0, :alias => 'INITSTATE')
     puts logate.to_xml
@@ -147,5 +147,19 @@ class TestHamlScais < Test::Unit::TestCase
       end
     end
     puts topo.to_xml
+  end
+  
+  def test_files
+    b = Files.new('B1').name('FILES Triple BC').active(true).debug(:warning).index(1).modes('ALL')
+    b.outputs do
+      output.save(true).alias('BC-1')
+      output.save(true).alias('BC-2')
+      output.save(true).alias('BC-3')
+    end
+    b.file 'path-to-file/data.dat'
+    b.select_for 'O0', :time => 0, :value => 1
+    b.select_for 'O1', :time => 0, :value => 2
+    b.select_for 'O2', :time => 3, :value => 4
+    puts b.to_xml
   end
 end

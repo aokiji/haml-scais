@@ -9,6 +9,8 @@ module Scais
       validates :outputs, :many => {:exact => 1}
       
       def initialize code, attributes={}
+        @low = Input.new(self)
+        @high = Input.new(self)
         super code, attributes.merge(:module => 'LOGATE')
       end
       
