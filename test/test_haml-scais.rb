@@ -89,7 +89,7 @@ class TestHamlScais < Test::Unit::TestCase
     lh.previous_output :alias => 'PREVOUT'
     lh.initial_output(0, :alias => 'INITOUT')
     lh.precision 0.005
-    lh.formula "(TIME<2.3) and (I0>1)"
+    lh.condition "(TIME<2.3) and (I0>1)"
     puts lh.to_xml
   end
   
