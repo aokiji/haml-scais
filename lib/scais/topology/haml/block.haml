@@ -56,4 +56,6 @@
         %initialvalue= ivar.initial_value
       - if ivar.alias
         %alias= ivar.alias
+  - if self.is_a?(Logate) and self.initial_state
+    %initstate= self.initial_state
     

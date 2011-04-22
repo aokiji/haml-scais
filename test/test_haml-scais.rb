@@ -75,6 +75,7 @@ class TestHamlScais < Test::Unit::TestCase
     logate.low.from('B15').modes('ALL').alias('IN_LOW')
     logate.condition "I0>0"
     logate.initial_output(0, :alias => 'INITSTATE')
+    logate.initial_state "FORCE_OFF"
     puts logate.to_xml
   end
   
@@ -188,8 +189,8 @@ class TestHamlScais < Test::Unit::TestCase
     logate.inputs do
       input.alias('I0').from('B1').modes('ALL')
     end
-    #logate.high.from('B14').modes('ALL').alias('IN_HIGH')
-    #logate.low.from('B15').modes('ALL').alias('IN_LOW')
+    logate.high.from('B14').modes('ALL').alias('IN_HIGH')
+    logate.low.from('B15').modes('ALL').alias('IN_LOW')
     logate.condition "I0>0"
     logate.initial_output(0, :alias => 'INITSTATE')
     puts logate.to_xml

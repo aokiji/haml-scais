@@ -4,6 +4,7 @@ module Scais
       attr_chainable :low, :high
       constants :condition => :formula
       initial_variables :initial_output
+      attr_chainable :initial_state
       
       validates :low, :high, :condition, :presence => true
       validates :outputs, :many => {:exact => 1}
